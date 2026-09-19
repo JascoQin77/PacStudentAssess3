@@ -12,6 +12,38 @@ public static class CreateVisualAnimators
 
     static AnimationClip Clip(string name) => AssetDatabase.LoadAssetAtPath<AnimationClip>(Anim + name + ".anim");
 
+    static Sprite[] Sprites(string file)
+    {
+        var found = new System.Collections.Generic.List<Sprite>();
+        foreach (var asset in AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/" + file))
+            if (asset is Sprite) found.Add((Sprite)asset);
+        found.Sort((a, b) => a.rect.x.CompareTo(b.rect.x));
+        return found.ToArray();
+    }
+
+    static void SetFrames(string clipName, Sprite[] frames, bool loop = true)
+    {
+        var clip = Clip(clipName);
+        if (clip == null) throw new System.Exception("Missing animation clip: " + clipName);
+        if (frames == null || frames.Length < 2) throw new System.Exception("Animation needs at least two sprites: " + clipName);
+        var binding = EditorCurveBinding.PPtrCurve("", typeof(SpriteRenderer), "m_Sprite");
+        var keys = new ObjectReferenceKeyframe[frames.Length];
+        for (int i = 0; i < frames.Length; i++)
+        {
+            keys[i] = new ObjectReferenceKeyframe { time = i * 0.2f, value = frames[i] };
+        }
+        AnimationUtility.SetObjectReferenceCurve(clip, binding, keys);
+        var settings = AnimationUtility.GetAnimationClipSettings(clip);
+        settings.loopTime = loop;
+        AnimationUtility.SetAnimationClipSettings(clip, settings);
+        EditorUtility.SetDirty(clip);
+    }
+
+    static Sprite[] Pair(string first, string second)
+    {
+        return new[] { Sprites(first)[0], Sprites(second)[0] };
+    }
+
     static AnimatorState AddState(AnimatorStateMachine sm, string name, AnimationClip clip, Vector2 pos)
     {
         var s = sm.AddState(name, pos);
@@ -146,6 +178,31 @@ public static class CreateVisualAnimators
             lines.Add(Path.GetFileName(path) + " states=" + c.layers[0].stateMachine.states.Length);
         }
         File.WriteAllLines("C:/Users/Lenovo/Documents/New project/animator_validation.txt", lines.ToArray());
+    }
+
+    public static void RepairClipsAndControllers()
+    {
+        SetFrames("PacStudent_Walk_Up", Sprites("PacStudent背面.png"));
+        SetFrames("PacStudent_Walk_Down", Sprites("PacStudent正面.png"));
+        SetFrames("PacStudent_Walk_Left", Sprites("PacStudent左面.png"));
+        SetFrames("PacStudent_Walk_Right", Sprites("PacStudent右面.png"));
+        var front = Sprites("PacStudent正面.png");
+        SetFrames("PacStudent_Dead", new[] { front[0], Sprites("PacStudent死亡.png")[0] }, false);
+
+        foreach (var direction in new[] { "up", "down", "left", "right" })
+        {
+            SetFrames("Ghost_Normal_" + direction, Pair("Ghost_" + direction + ".png", "Ghost_" + direction + "_frame2.png"));
+            SetFrames("Ghost_Scared_" + direction, Pair("ScaredGhost_" + direction + ".png", "ScaredGhost_" + direction + "_frame2.png"));
+        }
+        SetFrames("Ghost_Dead", Pair("Ghost_dead.png", "Ghost_dead_frame2.png"), false);
+        SetFrames("Ghost_Recovering", new[] { Sprites("Ghost_up.png")[0], Sprites("ScaredGhost_up.png")[0] });
+        SetFrames("Pellet_Flash", Pair("颗粒.png", "颗粒_闪烁.png"));
+        AssetDatabase.SaveAssets();
+        MakePacStudent(); MakePellet(); MakeGhost();
+        AssetDatabase.SaveAssets();
+        RebuildVisualShowcase.BindPacStudentMovement();
+        Validate();
+        Debug.Log("Animation clips repaired from imported Sprite objects.");
     }
 }
 

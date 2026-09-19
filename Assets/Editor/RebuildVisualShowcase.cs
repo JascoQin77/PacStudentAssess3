@@ -126,4 +126,121 @@ public static class RebuildVisualShowcase
         AssetDatabase.SaveAssets();
         Debug.Log("Visual animations integrated into RecreatedLevel.");
     }
+
+    public static void BuildManualLevelLayout()
+    {
+        var scene = EditorSceneManager.OpenScene("Assets/Scenes/RecreatedLevel.unity", OpenSceneMode.Single);
+        var previous = GameObject.Find("Level01_Manual");
+        if (previous != null) Object.DestroyImmediate(previous);
+        var level = new GameObject("Level01_Manual");
+        var walls = new GameObject("WallTiles");
+        walls.transform.SetParent(level.transform, false);
+        var pellets = new GameObject("Pellets");
+        pellets.transform.SetParent(level.transform, false);
+
+        int[,] map = new int[,] {
+            {1,2,2,2,2,2,2,2,2,2,2,2,2,7},
+            {2,5,5,5,5,5,5,5,5,5,5,5,5,4},
+            {2,5,3,4,4,3,5,3,4,4,4,3,5,4},
+            {2,6,4,0,0,4,5,4,0,0,0,4,5,4},
+            {2,5,3,4,4,3,5,3,4,4,4,3,5,3},
+            {2,5,5,5,5,5,5,5,5,5,5,5,5,5},
+            {2,5,3,4,4,3,5,3,3,5,3,4,4,4},
+            {2,5,3,4,4,3,5,4,4,5,3,4,4,3},
+            {2,5,5,5,5,5,5,4,4,5,5,5,5,4},
+            {1,2,2,2,2,1,5,4,3,4,4,3,0,4},
+            {0,0,0,0,0,2,5,4,3,4,4,3,0,3},
+            {0,0,0,0,0,2,5,4,4,0,0,0,0,0},
+            {0,0,0,0,0,2,5,4,4,0,3,4,4,8},
+            {2,2,2,2,2,1,5,3,3,0,4,0,0,0},
+            {0,0,0,0,0,0,5,0,0,0,4,0,0,0}
+        };
+        int rows = map.GetLength(0), cols = map.GetLength(1);
+        for (int r = 0; r < rows; r++)
+        for (int c = 0; c < cols; c++)
+        {
+            AddManualTile(map[r, c], r, c, false, false, rows, cols, walls.transform, pellets.transform);
+            AddManualTile(map[r, c], r, c, true, false, rows, cols, walls.transform, pellets.transform);
+            AddManualTile(map[r, c], r, c, false, true, rows, cols, walls.transform, pellets.transform);
+            AddManualTile(map[r, c], r, c, true, true, rows, cols, walls.transform, pellets.transform);
+        }
+
+        var camera = Camera.main;
+        if (camera != null)
+        {
+            camera.transform.position = new Vector3(0, 0, -10);
+            camera.orthographic = true;
+            camera.orthographicSize = 16.5f;
+        }
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.SaveAssets();
+        Debug.Log("Manual Level 01 layout built in RecreatedLevel.");
+    }
+
+    public static void BindPacStudentMovement()
+    {
+        var scene = EditorSceneManager.OpenScene("Assets/Scenes/RecreatedLevel.unity", OpenSceneMode.Single);
+        var pac = GameObject.Find("PacStudent_Animated");
+        if (pac == null) throw new System.Exception("PacStudent_Animated was not found.");
+        var pacRenderer = pac.GetComponent<SpriteRenderer>();
+        if (pacRenderer == null) pacRenderer = pac.AddComponent<SpriteRenderer>();
+        var pacSprites = AssetDatabase.LoadAllAssetsAtPath("Assets/Sprites/PacStudent正面.png");
+        foreach (var asset in pacSprites)
+            if (asset is Sprite) { pacRenderer.sprite = (Sprite)asset; break; }
+        pacRenderer.sortingOrder = 20;
+        var movement = pac.GetComponent<PacStudentMovement>();
+        if (movement == null) movement = pac.AddComponent<PacStudentMovement>();
+        var movementData = new SerializedObject(movement);
+        var route = movementData.FindProperty("clockwiseRoute");
+        route.arraySize = 4;
+        Vector3[] points = { new Vector3(-11.5f, 12.5f, 0f), new Vector3(-8.5f, 12.5f, 0f), new Vector3(-8.5f, 10.5f, 0f), new Vector3(-11.5f, 10.5f, 0f) };
+        for (int i = 0; i < points.Length; i++) route.GetArrayElementAtIndex(i).vector3Value = points[i];
+        movementData.ApplyModifiedPropertiesWithoutUndo();
+        var audio = pac.GetComponent<AudioSource>();
+        if (audio == null) audio = pac.AddComponent<AudioSource>();
+        audio.clip = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio Clips/PacStudent_move.wav");
+        audio.loop = true;
+        audio.playOnAwake = false;
+        var animator = pac.GetComponent<Animator>();
+        if (animator == null) animator = pac.AddComponent<Animator>();
+        animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(ControllerPath + "PacStudentAnimator.controller");
+        animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.SaveAssets();
+        Debug.Log("PacStudentMovement bound to PacStudent_Animated.");
+    }
+
+    static void AddManualTile(int value, int r, int c, bool mirrorX, bool mirrorY, int rows, int cols, Transform walls, Transform pellets)
+    {
+        float x = mirrorX ? (13.5f - c) : (-13.5f + c);
+        float y = mirrorY ? (-14.5f + r) : (14.5f - r);
+        int rotation = 0;
+        if (value == 1 || value == 3)
+            rotation = ((mirrorX ? 1 : 0) + (mirrorY ? 2 : 0)) * 90;
+        else if (value == 2 || value == 4)
+            rotation = (c == 0 || c == cols - 1) ? 90 : 0;
+        else if (value == 7)
+            rotation = mirrorX ? 90 : 0;
+        else if (value == 8)
+            rotation = mirrorX ? 180 : 0;
+
+        if (value >= 1 && value <= 4 || value == 7 || value == 8)
+        {
+            string file = value == 1 ? "Wall_OutsideCorner.png" :
+                          value == 2 ? "Wall_Outside.png" :
+                          value == 3 ? "Wall_InsideCorner.png" :
+                          value == 4 ? "Wall_Inside.png" :
+                          value == 7 ? "Wall_TJunction.png" : "Wall_GhostExit.png";
+            var go = AddSprite(walls, "Tile_" + value + "_" + r + "_" + c + "_" + mirrorX + "_" + mirrorY, new Vector3(x, y, 0), Sprite(file));
+            go.transform.localRotation = Quaternion.Euler(0, 0, rotation);
+            return;
+        }
+        if (value == 5 || value == 6)
+        {
+            var go = AddSprite(pellets, value == 5 ? "StandardPellet" : "PowerPellet", new Vector3(x, y, -0.1f), Sprite("颗粒.png"), value == 5 ? 0.08f : 0.14f);
+            return;
+        }
+    }
 }

@@ -8,24 +8,4 @@ AnimatorOverrideController:
   m_PrefabAsset: {fileID: 0}
   m_Name: GhostAnimator_Red
   m_Controller: {fileID: 9100000, guid: 4785cdb86cc1c03459e0542dd418de18, type: 2}
-  m_Clips:
-  - m_OriginalClip: {fileID: 1, guid: a4e9272fee9948aeb936be370bf1137a, type: 2}
-    m_OverrideClip: {fileID: 1, guid: a4e9272fee9948aeb936be370bf1137a, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: a049ab848a0d4e2eaddc0a47460db1a1, type: 2}
-    m_OverrideClip: {fileID: 1, guid: a049ab848a0d4e2eaddc0a47460db1a1, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: fe39df7a9952465e81c5bd1327170971, type: 2}
-    m_OverrideClip: {fileID: 1, guid: fe39df7a9952465e81c5bd1327170971, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: fcd5bf75363f4c398e1561741653b522, type: 2}
-    m_OverrideClip: {fileID: 1, guid: fcd5bf75363f4c398e1561741653b522, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: 049fa41d23fd4698bbc3d893c311a6bd, type: 2}
-    m_OverrideClip: {fileID: 1, guid: 049fa41d23fd4698bbc3d893c311a6bd, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: 9d2f7b6a4c1e4c8e9a7b2d3f5e6c8a10, type: 2}
-    m_OverrideClip: {fileID: 1, guid: 9d2f7b6a4c1e4c8e9a7b2d3f5e6c8a10, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: 10c66c5a32f943c8ace7aa8562636c16, type: 2}
-    m_OverrideClip: {fileID: 1, guid: 10c66c5a32f943c8ace7aa8562636c16, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: a76bf910e9e54a2cb78bacb2cf87cf41, type: 2}
-    m_OverrideClip: {fileID: 1, guid: a76bf910e9e54a2cb78bacb2cf87cf41, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: 2ef0c6dc278f45bca551e7855ad477a5, type: 2}
-    m_OverrideClip: {fileID: 1, guid: 2ef0c6dc278f45bca551e7855ad477a5, type: 2}
-  - m_OriginalClip: {fileID: 1, guid: 1255ecf68ad14770b3ff55b55383e4b1, type: 2}
-    m_OverrideClip: {fileID: 1, guid: 1255ecf68ad14770b3ff55b55383e4b1, type: 2}
+  m_Clips: []
