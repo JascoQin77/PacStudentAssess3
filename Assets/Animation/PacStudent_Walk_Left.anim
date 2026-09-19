@@ -7,7 +7,7 @@ AnimationClip:
   m_StopTime: 0.8
   m_SampleRate: 8
   m_WrapMode: 2
-  m_ObjectReferenceCurves:
+  m_PPtrCurves:
   - curve:
       serializedVersion: 2
       keyframes:
@@ -26,3 +26,5 @@ AnimationClip:
     m_StopTime: 0.8
     m_LoopTime: 1
   m_Events: []
+
+

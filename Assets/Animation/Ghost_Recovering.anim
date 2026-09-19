@@ -2,16 +2,14 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!74 &1
 AnimationClip:
-  m_Name: Ghost_Normal_up
+  m_Name: Ghost_Recovering
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
   m_UseHighQualityCurve: 1
-  m_StopTime: 0.4
-  m_SampleRate: 5
+  m_StopTime: 0.8
+  m_SampleRate: 8
   m_WrapMode: 2
-  m_EditorCurves: []
-  m_EulerCurves: []
   m_PPtrCurves:
   - curve:
       serializedVersion: 2
@@ -21,17 +19,21 @@ AnimationClip:
         value: {fileID: 21300000, guid: b21662308d0d496c8cc3fde8722c94ff, type: 3}
       - serializedVersion: 3
         time: 0.2
-        value: {fileID: 21300000, guid: 67138cc8ce1d4c5395de2635070456a5, type: 3}
+        value: {fileID: 21300000, guid: b7a08ca5e0cd436da0525fffba6f2821, type: 3}
+      - serializedVersion: 3
+        time: 0.4
+        value: {fileID: 21300000, guid: b21662308d0d496c8cc3fde8722c94ff, type: 3}
+      - serializedVersion: 3
+        time: 0.6
+        value: {fileID: 21300000, guid: b7a08ca5e0cd436da0525fffba6f2821, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_FloatCurves: []
   m_AnimationClipSettings:
     serializedVersion: 2
-    m_StopTime: 0.4
+    m_StopTime: 0.8
     m_LoopTime: 1
   m_Events: []
-
 
 

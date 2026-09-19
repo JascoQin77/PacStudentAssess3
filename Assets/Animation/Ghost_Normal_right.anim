@@ -12,7 +12,7 @@ AnimationClip:
   m_WrapMode: 2
   m_EditorCurves: []
   m_EulerCurves: []
-  m_ObjectReferenceCurves:
+  m_PPtrCurves:
   - curve:
       serializedVersion: 2
       keyframes:
@@ -26,10 +26,12 @@ AnimationClip:
     path: 
     classID: 212
     script: {fileID: 0}
-  m_PPtrCurves: []
+  m_FloatCurves: []
   m_AnimationClipSettings:
     serializedVersion: 2
     m_StopTime: 0.4
     m_LoopTime: 1
   m_Events: []
+
+
 
