@@ -212,6 +212,34 @@ public static class RebuildVisualShowcase
         Debug.Log("PacStudentMovement bound to PacStudent_Animated.");
     }
 
+    public static void BindLevelGenerator()
+    {
+        var scene = EditorSceneManager.OpenScene("Assets/Scenes/RecreatedLevel.unity", OpenSceneMode.Single);
+        var host = GameObject.Find("LevelGenerator");
+        if (host == null) host = new GameObject("LevelGenerator");
+        var generator = host.GetComponent<LevelGenerator>();
+        if (generator == null) generator = host.AddComponent<LevelGenerator>();
+        var so = new SerializedObject(generator);
+        var manual = GameObject.Find("Level01_Manual");
+        var parent = GameObject.Find("LevelRoot");
+        so.FindProperty("manualLevel").objectReferenceValue = manual != null ? manual.transform : null;
+        so.FindProperty("tileParent").objectReferenceValue = parent != null ? parent.transform : host.transform;
+        so.FindProperty("pelletParent").objectReferenceValue = parent != null ? parent.transform : host.transform;
+        so.FindProperty("levelCamera").objectReferenceValue = Camera.main;
+        var sprites = so.FindProperty("tileSprites");
+        string[] names = { "Wall_OutsideCorner.png", "Wall_Outside.png", "Wall_InsideCorner.png", "Wall_Inside.png", "Wall_TJunction.png", "Wall_GhostExit.png" };
+        sprites.arraySize = names.Length;
+        for (int i = 0; i < names.Length; i++)
+            sprites.GetArrayElementAtIndex(i).objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/" + names[i]);
+        so.FindProperty("pelletSprite").objectReferenceValue = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/颗粒.png");
+        so.FindProperty("powerPelletController").objectReferenceValue = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(ControllerPath + "PowerPelletAnimator.controller");
+        so.ApplyModifiedPropertiesWithoutUndo();
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        AssetDatabase.SaveAssets();
+        Debug.Log("LevelGenerator bound to RecreatedLevel.");
+    }
+
     static void AddManualTile(int value, int r, int c, bool mirrorX, bool mirrorY, int rows, int cols, Transform walls, Transform pellets)
     {
         float x = mirrorX ? (13.5f - c) : (-13.5f + c);

@@ -46089,6 +46089,64 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1562296034
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1562296036}
+  - component: {fileID: 1562296035}
+  m_Layer: 0
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1562296035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562296034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e29b6ab2ed08840bab01aebe4aa4d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
+  manualLevel: {fileID: 1079268728}
+  tileParent: {fileID: 1009907633}
+  pelletParent: {fileID: 1009907633}
+  levelCamera: {fileID: 2094691523}
+  tileSize: 1
+  tileSprites:
+  - {fileID: 21300000, guid: b38972665ca1480590f635e6d6a2f90a, type: 3}
+  - {fileID: 21300000, guid: 7df2689ccc684530af6827a48d4fb541, type: 3}
+  - {fileID: 21300000, guid: f2a166e98cc34d3a9f3a81d0990615d5, type: 3}
+  - {fileID: 21300000, guid: 2d0c13f143e947168f05718ddf568c8a, type: 3}
+  - {fileID: 21300000, guid: bc2b6b675540467ca08d5f00bbc58fc9, type: 3}
+  - {fileID: 21300000, guid: 206be33d0b194b47b022ebca5269c99b, type: 3}
+  pelletSprite: {fileID: 21300000, guid: 32d34cbdd5f84348bc33bc1a5dd134d8, type: 3}
+  powerPelletController: {fileID: 9100000, guid: e73ba2ffaee7f1841aa89fc57f0ea475, type: 2}
+--- !u!4 &1562296036
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562296034}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1565574170
 GameObject:
   m_ObjectHideFlags: 0
@@ -62920,3 +62978,4 @@ SceneRoots:
   - {fileID: 1884426381}
   - {fileID: 707813950}
   - {fileID: 1079268728}
+  - {fileID: 1562296036}
