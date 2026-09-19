@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!74 &1
+AnimationClip:
+  m_Name: PacStudent_Walk_Right
+  serializedVersion: 6
+  m_StopTime: 0.8
+  m_SampleRate: 8
+  m_WrapMode: 2
+  m_ObjectReferenceCurves:
+  - curve:
+      serializedVersion: 2
+      keyframes:
+      - serializedVersion: 3
+        time: 0
+        value: {fileID: -653107329, guid: 091b8ee107898774380c95bc520b22e6, type: 3}
+      - serializedVersion: 3
+        time: 0.4
+        value: {fileID: 1423676325, guid: 091b8ee107898774380c95bc520b22e6, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_StopTime: 0.8
+    m_LoopTime: 1
+  m_Events: []

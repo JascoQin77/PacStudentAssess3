@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!74 &1
+AnimationClip:
+  m_Name: PacStudent_Walk_Up
+  serializedVersion: 6
+  m_Legacy: 0
+  m_Compressed: 0
+  m_UseHighQualityCurve: 1
+  m_StopTime: 0.8
+  m_SampleRate: 8
+  m_WrapMode: 2
+  m_ObjectReferenceCurves:
+  - curve:
+      serializedVersion: 2
+      keyframes:
+      - serializedVersion: 3
+        time: 0
+        value: {fileID: 283696071, guid: c5a95a455f17e84488eed200f8777ac9, type: 3}
+      - serializedVersion: 3
+        time: 0.4
+        value: {fileID: -1864513563, guid: c5a95a455f17e84488eed200f8777ac9, type: 3}
+    attribute: m_Sprite
+    path: 
+    classID: 212
+    script: {fileID: 0}
+  m_AnimationClipSettings:
+    serializedVersion: 2
+    m_StopTime: 0.8
+    m_LoopTime: 1
+  m_Events: []
