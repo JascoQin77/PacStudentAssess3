@@ -1,6 +1,6 @@
 # Assessment 4：Catch-up from Assessment 3
 
-本次修改对应提供截图中的第 7 项。正式关卡为 `Assets/Scenes/RecreatedLevel.unity`，已加入 Build Settings，作为第一个且唯一启用的场景。
+本次修改对应提供截图中的第 7 项。正式关卡为 `Assets/Scenes/RecreatedLevel.unity`，已加入 Build Settings；新增标题菜单后，由首个场景 `StartScene` 的 Level 1 按钮进入。
 
 | 截图要求 | 已完成的修改 |
 | --- | --- |

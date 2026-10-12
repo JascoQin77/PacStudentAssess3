@@ -77,7 +77,13 @@ public static class PrepareAssessment4
         camera.backgroundColor = new Color(0.015f, 0.02f, 0.06f);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(ScenePath, true) };
+        // Keep the title screen first once it has been created.
+        var buildScenes = new List<EditorBuildSettingsScene>();
+        const string startScene = "Assets/Scenes/StartScene.unity";
+        if (File.Exists(startScene)) buildScenes.Add(new EditorBuildSettingsScene(startScene, true));
+        buildScenes.Add(new EditorBuildSettingsScene(ScenePath, true));
+        buildScenes.AddRange(EditorBuildSettings.scenes.Where(s => s.path != startScene && s.path != ScenePath));
+        EditorBuildSettings.scenes = buildScenes.ToArray();
         AssetDatabase.SaveAssets();
         Validate();
         Debug.Log("Assessment 4 catch-up scene prepared and saved.");
