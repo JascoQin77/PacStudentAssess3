@@ -12,17 +12,6 @@ public static class StartScenePlayBootstrap
     static StartScenePlayBootstrap()
     {
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-        if (!UnityEngine.Application.isBatchMode && !SessionState.GetBool("PacStudent.StartSceneOpened", false))
-        {
-            SessionState.SetBool("PacStudent.StartSceneOpened", true);
-            EditorApplication.delayCall += OpenStartSceneOnce;
-        }
-    }
-
-    static void OpenStartSceneOnce()
-    {
-        if (!EditorApplication.isPlaying && SceneManager.GetActiveScene().path != StartScenePath)
-            EditorSceneManager.OpenScene(StartScenePath, OpenSceneMode.Single);
     }
 
     static void OnPlayModeStateChanged(PlayModeStateChange state)

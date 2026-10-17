@@ -12,14 +12,16 @@ public static class Assessment4MovementVerification
     static Vector3 positionAfterMove;
     static bool inputSent;
     static bool cherryWasActive;
+    static bool requestedLevel;
 
     public static void Run()
     {
-        EditorSceneManager.OpenScene("Assets/Scenes/RecreatedLevel.unity");
+        EditorSceneManager.OpenScene("Assets/Scenes/StartScene.unity");
         frameCount = 0;
         startedAt = 0f;
         inputSent = false;
         cherryWasActive = false;
+        requestedLevel = false;
         EditorApplication.update += Tick;
         EditorApplication.EnterPlaymode();
     }
@@ -30,9 +32,18 @@ public static class Assessment4MovementVerification
         {
             if (!EditorApplication.isPlaying) return;
             frameCount++;
+            if (!requestedLevel && frameCount > 10)
+            {
+                var menu = UnityEngine.Object.FindFirstObjectByType<StartScreenController>();
+                if (menu == null) throw new Exception("StartScene controller is missing in Play Mode.");
+                requestedLevel = true;
+                menu.LoadLevel1();
+                return;
+            }
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "RecreatedLevel") return;
             var pac = UnityEngine.Object.FindFirstObjectByType<PacStudentController>();
             var cherry = UnityEngine.Object.FindFirstObjectByType<CherryController>();
-            if (pac == null || cherry == null) throw new Exception("Movement controllers are missing in Play Mode.");
+            if (pac == null || cherry == null) throw new Exception("Movement controllers are missing in RecreatedLevel Play Mode.");
             if (frameCount == 2)
             {
                 initialPosition = pac.transform.position;
