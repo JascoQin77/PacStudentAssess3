@@ -177,7 +177,8 @@ public static class CreateVisualAnimators
             var c = AssetDatabase.LoadAssetAtPath<AnimatorController>(path);
             lines.Add(Path.GetFileName(path) + " states=" + c.layers[0].stateMachine.states.Length);
         }
-        File.WriteAllLines("C:/Users/Lenovo/Documents/New project/animator_validation.txt", lines.ToArray());
+        Directory.CreateDirectory("Logs");
+        File.WriteAllLines("Logs/animator_validation.txt", lines.ToArray());
     }
 
     public static void RepairClipsAndControllers()
@@ -200,7 +201,7 @@ public static class CreateVisualAnimators
         AssetDatabase.SaveAssets();
         MakePacStudent(); MakePellet(); MakeGhost();
         AssetDatabase.SaveAssets();
-        RebuildVisualShowcase.BindPacStudentMovement();
+        PrepareAssessment4.Run();
         Validate();
         Debug.Log("Animation clips repaired from imported Sprite objects.");
     }
