@@ -19,6 +19,7 @@ public class CherryController : MonoBehaviour
     Vector3 endPoint;
     float progress;
     float nextSpawnTime;
+    PacStudentGameController game;
 
     public bool IsCherryActive => activeCherry != null;
     public float TimeUntilNextSpawn => Mathf.Max(0f, nextSpawnTime - Time.time);
@@ -33,6 +34,7 @@ public class CherryController : MonoBehaviour
             if (pac != null) pacStudent = pac.transform;
         }
         if (hud == null) hud = FindFirstObjectByType<InGameHUDController>();
+        game = FindFirstObjectByType<PacStudentGameController>();
         collectAudio = GetComponent<AudioSource>();
         if (collectAudio == null) collectAudio = gameObject.AddComponent<AudioSource>();
         collectAudio.playOnAwake = false;
@@ -42,6 +44,12 @@ public class CherryController : MonoBehaviour
 
     void Update()
     {
+        // Spawn delay and travel both pause during countdown/death/game over.
+        if (game != null && !game.IsPlaying)
+        {
+            nextSpawnTime += Time.deltaTime;
+            return;
+        }
         if (activeCherry == null)
         {
             if (Time.time >= nextSpawnTime) SpawnCherry();
@@ -54,11 +62,6 @@ public class CherryController : MonoBehaviour
         var renderer = activeCherry.GetComponent<SpriteRenderer>();
         renderer.enabled = IsInsideMap(activeCherry.transform.position);
 
-        if (pacStudent != null && Vector2.Distance(activeCherry.transform.position, pacStudent.position) < .55f)
-        {
-            CollectCherry();
-            return;
-        }
         if (progress >= 1f) DestroyCherry();
     }
 
@@ -76,13 +79,19 @@ public class CherryController : MonoBehaviour
         renderer.sprite = cherrySprite;
         renderer.sortingOrder = 50;
         renderer.enabled = false;
+        var collider = activeCherry.AddComponent<CircleCollider2D>();
+        collider.radius = .3f;
+        collider.isTrigger = true;
+        var item = activeCherry.AddComponent<LevelCollectible>();
+        item.kind = LevelCollectible.CollectibleKind.Cherry;
+        item.cherryOwner = this;
     }
 
-    void CollectCherry()
+    public void OnCherryCollected(GameObject cherry)
     {
-        if (hud != null) hud.AddScore(100);
-        if (collectAudio != null && collectClip != null) collectAudio.PlayOneShot(collectClip);
-        DestroyCherry();
+        if (cherry != activeCherry) return;
+        activeCherry = null;
+        nextSpawnTime = Time.time + spawnDelay;
     }
 
     void DestroyCherry()

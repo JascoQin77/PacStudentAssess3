@@ -10,6 +10,10 @@ public class InGameHUDController : MonoBehaviour
     [SerializeField] Text levelNameText;
     [SerializeField] Image[] lifeIcons;
     [SerializeField] string startScene = "StartScene";
+    [SerializeField] GameObject blockingOverlay;
+    [SerializeField] Text roundMessage;
+    [SerializeField] Button[] buttons;
+    bool buttonsEnabled = true;
     float elapsed;
     float scaredRemaining;
     int score;
@@ -29,7 +33,14 @@ public class InGameHUDController : MonoBehaviour
         startScene = string.IsNullOrEmpty(startSceneName) ? "StartScene" : startSceneName;
     }
 
-    void Start()
+    public void ConfigureRoundUI(GameObject overlay, Text message, Button[] uiButtons)
+    {
+        blockingOverlay = overlay;
+        roundMessage = message;
+        buttons = uiButtons;
+    }
+
+    public void ResetRound()
     {
         score = 0;
         elapsed = 0;
@@ -39,11 +50,34 @@ public class InGameHUDController : MonoBehaviour
         Refresh();
     }
 
-    void Update()
+    public void AdvanceTime(float delta)
     {
-        elapsed += Time.deltaTime;
-        if (scaredRemaining > 0) scaredRemaining = Mathf.Max(0, scaredRemaining - Time.deltaTime);
+        elapsed += Mathf.Max(0, delta);
         Refresh();
+    }
+
+    public void SetScaredTime(float seconds)
+    {
+        scaredRemaining = Mathf.Max(0, seconds);
+        Refresh();
+    }
+
+    public void ShowBlockingMessage(string message)
+    {
+        if (roundMessage != null) roundMessage.text = message;
+        if (blockingOverlay != null) blockingOverlay.SetActive(true);
+    }
+
+    public void HideBlockingMessage()
+    {
+        if (blockingOverlay != null) blockingOverlay.SetActive(false);
+    }
+
+    public void SetButtonsEnabled(bool value)
+    {
+        buttonsEnabled = value;
+        if (buttons == null) return;
+        foreach (var button in buttons) if (button != null) button.interactable = value;
     }
 
     public void SetScore(int value)
@@ -76,6 +110,7 @@ public class InGameHUDController : MonoBehaviour
 
     public void ExitToStartScene()
     {
+        if (!buttonsEnabled) return;
         if (Application.CanStreamedLevelBeLoaded(startScene)) SceneManager.LoadScene(startScene);
         else Debug.LogError("Start scene is not enabled in Build Settings: " + startScene);
     }
@@ -91,7 +126,7 @@ public class InGameHUDController : MonoBehaviour
         }
     }
 
-    static string FormatTime(float seconds)
+    public static string FormatTime(float seconds)
     {
         int minutes = Mathf.FloorToInt(seconds / 60f);
         int wholeSeconds = Mathf.FloorToInt(seconds) % 60;

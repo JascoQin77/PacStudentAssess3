@@ -30,6 +30,10 @@ public class PacStudentController : MonoBehaviour
     Vector2Int minCell;
     Vector2Int maxCell;
     bool boundsReady;
+    bool controlEnabled;
+    bool bumpReported;
+    Vector3 startPosition;
+    PacStudentGameController game;
 
     public bool IsLerping => isLerping;
     public float MoveSpeed => moveSpeed;
@@ -38,9 +42,10 @@ public class PacStudentController : MonoBehaviour
 
     public void SetInput(Vector2Int input)
     {
-        if (input == Vector2Int.zero) return;
+        if (!controlEnabled || input == Vector2Int.zero) return;
         lastInput = new Vector2Int(Mathf.Clamp(input.x, -1, 1), Mathf.Clamp(input.y, -1, 1));
         hasInput = true;
+        bumpReported = false;
     }
 
     void Awake()
@@ -52,6 +57,8 @@ public class PacStudentController : MonoBehaviour
         }
         if (animator == null) animator = GetComponent<Animator>();
         if (movementAudio == null) movementAudio = GetComponent<AudioSource>();
+        game = FindFirstObjectByType<PacStudentGameController>();
+        startPosition = transform.position;
         BuildGrid();
     }
 
@@ -68,6 +75,7 @@ public class PacStudentController : MonoBehaviour
 
     void Update()
     {
+        if (!controlEnabled) return;
         ReadInput();
         if (isLerping)
         {
@@ -78,7 +86,7 @@ public class PacStudentController : MonoBehaviour
         bool started = hasInput && TryStartMove(lastInput);
         if (!started && currentInput != Vector2Int.zero)
             started = hasInput && TryStartMove(currentInput);
-        if (!started) StopMovementEffects();
+        if (!started) ReportBlockedMove();
     }
 
     void ReadInput()
@@ -89,8 +97,7 @@ public class PacStudentController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.S)) input = Vector2Int.down;
         else if (Input.GetKeyDown(KeyCode.D)) input = Vector2Int.right;
         if (input == Vector2Int.zero) return;
-        lastInput = input;
-        hasInput = true;
+        SetInput(input);
         SetAnimation(lastInput, isLerping);
     }
 
@@ -106,6 +113,7 @@ public class PacStudentController : MonoBehaviour
         lerpTarget = CellToWorld(targetCell);
         lerpElapsed = 0f;
         isLerping = true;
+        bumpReported = false;
         SetAnimation(direction, true);
         StartMovementEffects(IsPelletAt(candidate));
         return true;
@@ -125,7 +133,7 @@ public class PacStudentController : MonoBehaviour
         bool started = hasInput && TryStartMove(lastInput);
         if (!started && currentInput != Vector2Int.zero)
             started = hasInput && TryStartMove(currentInput);
-        if (!started) StopMovementEffects();
+        if (!started) ReportBlockedMove();
     }
 
     void BuildGrid()
@@ -156,9 +164,85 @@ public class PacStudentController : MonoBehaviour
 
     bool IsWalkable(Vector2Int cell)
     {
+        // Only the two empty tunnel lanes can extend beyond the side bounds.
+        if (boundsReady && Mathf.Abs(cell.y) == 1 &&
+            cell.x >= minCell.x - 2 && cell.x <= maxCell.x + 2) return !blockedCells.Contains(cell);
         if (!boundsReady || cell.x < minCell.x || cell.x > maxCell.x || cell.y < minCell.y || cell.y > maxCell.y)
             return false;
         return !blockedCells.Contains(cell);
+    }
+
+    void ReportBlockedMove()
+    {
+        StopMovementEffects();
+        if (!hasInput || bumpReported) return;
+        bumpReported = true;
+        if (game != null) game.BumpWall(transform.position + (Vector3)(Vector2)lastInput * .5f);
+    }
+
+    public void SetControlEnabled(bool value)
+    {
+        controlEnabled = value;
+        var trigger = GetComponent<Collider2D>();
+        if (trigger != null) trigger.enabled = value;
+        if (!value) StopMovementEffects();
+    }
+
+    public void ResetToStart()
+    {
+        transform.position = startPosition;
+        currentCell = targetCell = WorldToCell(startPosition);
+        isLerping = hasInput = bumpReported = false;
+        currentInput = Vector2Int.zero;
+        lastInput = Vector2Int.right;
+        StopMovementEffects();
+    }
+
+    public void PlayDeath(float animationSpeed)
+    {
+        isLerping = false;
+        if (animator == null) return;
+        animator.speed = animationSpeed;
+        animator.Play("Dead", 0, 0);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!controlEnabled || game == null || !game.IsPlaying) return;
+        var tunnel = other.GetComponent<TunnelTeleporter>();
+        if (tunnel != null)
+        {
+            transform.position = new Vector3(tunnel.destinationX, transform.position.y, transform.position.z);
+            currentCell = WorldToCell(transform.position);
+            isLerping = false;
+            currentInput = lastInput = tunnel.inwardDirection;
+            hasInput = true;
+            TryStartMove(currentInput);
+            return;
+        }
+        if (other.name.StartsWith("Tile_"))
+        {
+            // Grid tests normally reject walls before Lerp. This also handles
+            // an unexpected physical overlap without a Rigidbody response.
+            transform.position = isLerping ? lerpStart : CellToWorld(currentCell);
+            isLerping = false;
+            ReportBlockedMove();
+            return;
+        }
+        HandleContact(other);
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (controlEnabled && game != null && game.IsPlaying) HandleContact(other);
+    }
+
+    void HandleContact(Collider2D other)
+    {
+        var collectible = other.GetComponent<LevelCollectible>();
+        if (collectible != null) game.Collect(collectible);
+        var ghost = other.GetComponent<GhostStateController>();
+        if (ghost != null) game.TouchGhost(ghost);
     }
 
     bool IsPelletAt(Vector2Int cell)

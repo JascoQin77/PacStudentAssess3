@@ -28,8 +28,8 @@ public class StartScreenController : MonoBehaviour
         for (int i = 0; i < highScoreLabels.Length; i++)
         {
             highScoreLabels[i].text = PlayerPrefs.GetInt("Level" + (i + 1) + "HighScore", 0).ToString("D6");
-            double seconds = Mathf.Max(0, PlayerPrefs.GetFloat("Level" + (i + 1) + "BestTime", 0));
-            bestTimeLabels[i].text = TimeSpan.FromSeconds(seconds).ToString(@"hh\:mm\:ss");
+            float seconds = Mathf.Max(0, PlayerPrefs.GetFloat("Level" + (i + 1) + "BestTime", 0));
+            bestTimeLabels[i].text = InGameHUDController.FormatTime(seconds);
         }
         if (EventSystem.current != null && level1Button != null)
             EventSystem.current.SetSelectedGameObject(level1Button.gameObject);
