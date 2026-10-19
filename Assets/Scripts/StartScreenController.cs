@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class StartScreenController : MonoBehaviour
 {
     [SerializeField] string level1Scene = "RecreatedLevel";
-    [SerializeField] string level2Scene = "";
+    [SerializeField] string level2Scene = "InnovationScene";
     [SerializeField] Button level1Button;
     [SerializeField] Text statusText;
     [SerializeField] Text[] highScoreLabels;
@@ -39,6 +39,7 @@ public class StartScreenController : MonoBehaviour
 
     public void LoadLevel2()
     {
+        if (string.IsNullOrEmpty(level2Scene)) level2Scene = "InnovationScene";
         if (string.IsNullOrEmpty(level2Scene))
         {
             statusText.text = "A NEW ROUTE IS COMING SOON. KEEP YOUR SNEAKERS READY.";

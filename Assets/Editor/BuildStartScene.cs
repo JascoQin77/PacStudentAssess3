@@ -146,8 +146,8 @@ public static class BuildStartScene
         buttons[1].navigation = nav2;
         var status = Label(content, "MenuStatus", "MOUSE TO CHOOSE   /   ARROW KEYS + ENTER TO GO", V(0, 0), V(1, .055f), 14, Muted, FontStyle.Normal, TextAnchor.MiddleCenter);
         string secondScene = AssetDatabase.FindAssets("t:Scene").Select(AssetDatabase.GUIDToAssetPath)
-            .FirstOrDefault(p => System.IO.Path.GetFileNameWithoutExtension(p) == "DesignIteration");
-        controller.Configure(buttons[0], status, scores, times, secondScene == null ? "" : "DesignIteration");
+            .FirstOrDefault(p => System.IO.Path.GetFileNameWithoutExtension(p) == "InnovationScene");
+        controller.Configure(buttons[0], status, scores, times, "InnovationScene");
         UnityEventTools.AddPersistentListener(buttons[0].onClick, controller.LoadLevel1);
         UnityEventTools.AddPersistentListener(buttons[1].onClick, controller.LoadLevel2);
         new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));

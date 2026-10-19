@@ -4223,7 +4223,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::StartScreenController
   level1Scene: RecreatedLevel
-  level2Scene:
+  level2Scene: InnovationScene
   level1Button: {fileID: 1804744592}
   statusText: {fileID: 1178561443}
   highScoreLabels:

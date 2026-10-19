@@ -10,7 +10,7 @@
 | 展示 PacStudent 与 Ghost 精灵 | 使用项目原有角色精灵，通过 Canvas Image 展示一个学生和四只幽灵。 |
 | 明显动画的 Canvas 边框 | 16 个发光方块沿边框持续移动；边框及方块均为 Canvas 下的 RectTransform，按实际边框宽高计算路线。 |
 | Level 1 按钮 | 加载 Assessment 3 的 RecreatedLevel 场景。 |
-| Level 2 按钮 | 当前未创建 Design Iteration 场景，因此按截图允许的方式保留占位按钮，点击显示即将开放的提示。若之后建立 DesignIteration 场景，重新构建标题页时会绑定并加入场景列表。 |
+| Level 2 按钮 | 加载 `InnovationScene`，进入带有 Pulse Shift 能力的第二关。 |
 | 高亮与点击反馈 | 鼠标悬停、键盘选择时变色并放大；按下时缩小并播放点击音效。支持方向键选择和 Enter 确认。 |
 | 每关上次最高分和时间 | 两关各有独立显示，初始分数 000000（零），时间 00:00:00。已预留从 PlayerPrefs 读取数据的入口。 |
 | Start Scene 背景音乐循环 | 使用 Assets/Audio Clips/StartScene.wav，自动播放、循环，作为 2D 菜单音乐；进入关卡后随标题场景结束。 |
