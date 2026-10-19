@@ -1,13 +1,12 @@
 using UnityEngine;
 
-// Ghost AI is a later assessment section. This owns collision/animation state
-// independently of movement so countdown and death also freeze future AI.
+// Owns collision/animation state independently of GhostController movement so
+// countdown and death can freeze both systems together.
 public class GhostStateController : MonoBehaviour
 {
     public enum GhostState { Normal, Scared, Recovering, Dead }
     public GhostState State { get; private set; }
     public bool CanMove { get; private set; }
-    public float RespawnRemaining { get; private set; }
     Vector3 initialPosition;
     Animator animator;
 
@@ -16,6 +15,7 @@ public class GhostStateController : MonoBehaviour
         initialPosition = transform.position;
         animator = GetComponent<Animator>();
         SetState(GhostState.Normal);
+        if (GetComponent<GhostController>() == null) gameObject.AddComponent<GhostController>();
     }
 
     public void SetFrozen(bool frozen)
@@ -26,25 +26,27 @@ public class GhostStateController : MonoBehaviour
 
     public void Tick(float delta, float scaredRemaining)
     {
-        if (State == GhostState.Dead)
-        {
-            RespawnRemaining = Mathf.Max(0, RespawnRemaining - delta);
-            if (RespawnRemaining > 0) return;
-        }
+        if (State == GhostState.Dead) return;
         SetState(scaredRemaining <= 0 ? GhostState.Normal :
             scaredRemaining <= 3 ? GhostState.Recovering : GhostState.Scared);
     }
 
     public void Eat()
     {
-        RespawnRemaining = 3f;
         SetState(GhostState.Dead);
+    }
+
+    public void Revive(GhostState state)
+    {
+        if (State != GhostState.Dead) return;
+        SetState(state);
     }
 
     public void ResetGhost()
     {
         transform.position = initialPosition;
-        RespawnRemaining = 0;
+        var controller = GetComponent<GhostController>();
+        if (controller != null) controller.ResetMovement();
         SetState(GhostState.Normal);
     }
 

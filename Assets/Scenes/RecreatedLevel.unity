@@ -8245,6 +8245,7 @@ GameObject:
   - component: {fileID: 216059444}
   - component: {fileID: 216059443}
   - component: {fileID: 216059446}
+  - component: {fileID: 1900000003}
   m_Layer: 0
   m_Name: GhostBlue
   m_TagString: Untagged
@@ -8424,6 +8425,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61587667ee81876419070886ff09b342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostStateController
+--- !u!114 &1900000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216059440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f5d1b5a8bf4f5b8bd34ca3a1ee50f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GhostController
+  ghostNumber: 3
+  mazeRoot: {fileID: 0}
+  player: {fileID: 0}
+  game: {fileID: 0}
+  state: {fileID: 0}
+  tileSize: 1
 --- !u!1 &216643743
 GameObject:
   m_ObjectHideFlags: 0
@@ -91244,6 +91263,7 @@ GameObject:
   - component: {fileID: 1675695863}
   - component: {fileID: 1675695862}
   - component: {fileID: 1675695865}
+  - component: {fileID: 1900000002}
   m_Layer: 0
   m_Name: GhostPink
   m_TagString: Untagged
@@ -91423,6 +91443,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61587667ee81876419070886ff09b342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostStateController
+--- !u!114 &1900000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675695859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f5d1b5a8bf4f5b8bd34ca3a1ee50f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GhostController
+  ghostNumber: 2
+  mazeRoot: {fileID: 0}
+  player: {fileID: 0}
+  game: {fileID: 0}
+  state: {fileID: 0}
+  tileSize: 1
 --- !u!1 &1676090364
 GameObject:
   m_ObjectHideFlags: 0
@@ -107448,6 +107486,7 @@ GameObject:
   - component: {fileID: 2039252769}
   - component: {fileID: 2039252768}
   - component: {fileID: 2039252771}
+  - component: {fileID: 1900000001}
   m_Layer: 0
   m_Name: GhostRed
   m_TagString: Untagged
@@ -107643,6 +107682,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61587667ee81876419070886ff09b342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostStateController
+--- !u!114 &1900000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039252764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f5d1b5a8bf4f5b8bd34ca3a1ee50f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GhostController
+  ghostNumber: 1
+  mazeRoot: {fileID: 0}
+  player: {fileID: 0}
+  game: {fileID: 0}
+  state: {fileID: 0}
+  tileSize: 1
 --- !u!1 &2039748764
 GameObject:
   m_ObjectHideFlags: 0
@@ -112822,6 +112879,7 @@ GameObject:
   - component: {fileID: 2144737278}
   - component: {fileID: 2144737277}
   - component: {fileID: 2144737276}
+  - component: {fileID: 1900000004}
   m_Layer: 0
   m_Name: GhostOrange
   m_TagString: Untagged
@@ -112916,6 +112974,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61587667ee81876419070886ff09b342, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostStateController
+--- !u!114 &1900000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144737273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4f5d1b5a8bf4f5b8bd34ca3a1ee50f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GhostController
+  ghostNumber: 4
+  mazeRoot: {fileID: 0}
+  player: {fileID: 0}
+  game: {fileID: 0}
+  state: {fileID: 0}
+  tileSize: 1
 --- !u!50 &2144737277
 Rigidbody2D:
   serializedVersion: 5

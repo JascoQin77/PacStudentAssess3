@@ -145,29 +145,15 @@ public static class Assessment4CollisionsVerification
             }
             if (phase == 6)
             {
+                // The 85% AI requirement removes the old three-second timer:
+                // an eaten ghost stays Dead until it reaches its own spawn.
                 if (Time.time - at < 3.15f) return;
-                if (game.ScaredRemaining > 3f)
-                {
-                    Require(targetGhost.State == GhostStateController.GhostState.Scared, "Ghost respawns after three seconds into scared state");
-                    return;
-                }
-                if (game.ScaredRemaining > 2.8f) return;
-                Require(targetGhost.State == GhostStateController.GhostState.Recovering, "Final three seconds recovering");
-                game.TouchGhost(targetGhost);
-                expectedScore += 300;
-                at = Time.time; phase = 7; return;
-            }
-            if (phase == 7)
-            {
-                if (game.ScaredRemaining > 0) return;
-                Require(targetGhost.State == GhostStateController.GhostState.Dead, "Power expiry preserves Dead ghost");
-                phase = 8; return;
-            }
-            if (phase == 8)
-            {
-                if (Time.time - at < 3.15f) return;
-                Require(targetGhost.State == GhostStateController.GhostState.Normal, "Dead ghost returns Normal after own timer");
-                Append("Power pill, recovering, ghost +300, dead-state preservation and respawn PASS");
+                Require(targetGhost.State == GhostStateController.GhostState.Dead,
+                    "Dead ghost remains Dead until it reaches its spawn");
+                Append("Power pill, ghost +300, and dead-state persistence PASS");
+                // The death-reset path is covered later and is the supported
+                // way to restore a ghost without relying on a timer.
+                targetGhost.ResetGhost();
                 // Tunnel trigger at either edge continues inward.
                 PlaceAt(new Vector3(-14.4f, .5f, 0));
                 phase = 9; return;

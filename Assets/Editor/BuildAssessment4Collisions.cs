@@ -102,6 +102,13 @@ public static class BuildAssessment4Collisions
         so.ApplyModifiedPropertiesWithoutUndo();
         EditorUtility.SetDirty(game);
 
+        for (int i = 0; i < ghosts.Length; i++)
+        {
+            var controller = GetOrAdd<GhostController>(ghosts[i].gameObject);
+            controller.Configure(GhostNumber(ghosts[i].name, i + 1), maze.transform, player, game, ghosts[i]);
+            EditorUtility.SetDirty(controller);
+        }
+
         // Enforce the assessment rule even if a pre-existing body is added later.
         foreach (var body in UnityEngine.Object.FindObjectsByType<Rigidbody2D>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
@@ -228,6 +235,15 @@ public static class BuildAssessment4Collisions
         return component != null ? component : go.AddComponent<T>();
     }
 
+    static int GhostNumber(string name, int fallback)
+    {
+        if (name == "GhostRed") return 1;
+        if (name == "GhostPink") return 2;
+        if (name == "GhostBlue") return 3;
+        if (name == "GhostOrange") return 4;
+        return Mathf.Clamp(fallback, 1, 4);
+    }
+
     static void Bind(SerializedObject so, string field, UnityEngine.Object value) => so.FindProperty(field).objectReferenceValue = value;
 
     public static void Validate()
@@ -239,6 +255,15 @@ public static class BuildAssessment4Collisions
         foreach (var field in new[] { "player", "hud", "music", "effects", "wallParticles", "deathParticles", "introClip", "normalClip", "scaredClip", "deadGhostClip", "wallClip", "pelletClip", "cherryClip", "ghostEatClip", "deathClip", "deathAnimation" })
             Require(so.FindProperty(field).objectReferenceValue != null, field + " is bound");
         Require(so.FindProperty("ghosts").arraySize == 4, "Four ghosts are bound");
+        var controllers = UnityEngine.Object.FindObjectsByType<GhostController>(FindObjectsSortMode.None);
+        Require(controllers.Length == 4, "Four ghost movement controllers");
+        foreach (var controller in controllers)
+        {
+            var ghostSo = new SerializedObject(controller);
+            int expected = GhostNumber(controller.name, 0);
+            Require(expected > 0 && ghostSo.FindProperty("ghostNumber").intValue == expected,
+                controller.name + " has the correct ghost number");
+        }
         Require(UnityEngine.Object.FindObjectsByType<TunnelTeleporter>(FindObjectsSortMode.None).Length == 2, "Two tunnel teleporters");
         var items = UnityEngine.Object.FindObjectsByType<LevelCollectible>(FindObjectsSortMode.None);
         Require(items.Count(p => p.kind == LevelCollectible.CollectibleKind.PowerPill) == 4, "Four power pills");
